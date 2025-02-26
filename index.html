@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geography Challenge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #map { height: 500px; width: 90%; margin: auto; }
+        select, button { margin: 10px; padding: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h2>Geography Challenge</h2>
+    <p>Select a location, then click on the map where you think it is.</p>
+    <select id="locationSelect">
+        <option value="">-- Select a Location --</option>
+<option value="Canada">Canada</option>
+<option value="Istanbul / Constantinople">Istanbul / Constantinople</option>
+<option value="France">France</option>
+<option value="England">England</option>
+<option value="Scotland">Scotland</option>
+<option value="Ireland">Ireland</option>
+<option value="Paris">Paris</option>
+<option value="London">London</option>
+<option value="New York City">New York City</option>
+<option value="Washington DC">Washington DC</option>
+<option value="Florida">Florida</option>
+<option value="Brazil">Brazil</option>
+<option value="Peru">Peru</option>
+<option value="Argentina">Argentina</option>
+<option value="Venezuela">Venezuela</option>
+<option value="Mediterranean Sea">Mediterranean Sea</option>
+<option value="Suez Canal">Suez Canal</option>
+<option value="Egypt">Egypt</option>
+<option value="Saudi Arabia">Saudi Arabia</option>
+<option value="India">India</option>
+<option value="Indian Ocean">Indian Ocean</option>
+<option value="Afghanistan">Afghanistan</option>
+<option value="Australia">Australia</option>
+<option value="Greece">Greece</option>
+<option value="Austria">Austria</option>
+<option value="Italy">Italy</option>
+<option value="Hungary">Hungary</option>
+<option value="Ethiopia">Ethiopia</option>
+<option value="Morocco">Morocco</option>
+<option value="Ghana">Ghana</option>
+<option value="South Africa">South Africa</option>
+<option value="Angola">Angola</option>
+<option value="Cape of Good Hope">Cape of Good Hope</option>
+<option value="Cuba">Cuba</option>
+<option value="Jamaica">Jamaica</option>
+<option value="Haiti">Haiti</option>
+<option value="Turkey">Turkey</option>
+<option value="Middle East">Middle East</option>
+<option value="Israel / Palestine">Israel / Palestine</option>
+<option value="Pakistan">Pakistan</option>
+<option value="Thailand">Thailand</option>
+<option value="Vietnam">Vietnam</option>
+<option value="Somalia">Somalia</option>
+<option value="Yemen">Yemen</option>
+<option value="Arabian Peninsula">Arabian Peninsula</option>
+<option value="China">China</option>
+<option value="Japan">Japan</option>
+<option value="Russia">Russia</option>
+<option value="Ukraine">Ukraine</option>
+<option value="Iran">Iran</option>
+<option value="Iraq">Iraq</option>
+<option value="Tehran">Tehran</option>
+<option value="Vancouver Island">Vancouver Island</option>
+<option value="Ottawa">Ottawa</option>
+<option value="Hudson Bay">Hudson Bay</option>
+<option value="James Bay">James Bay</option>
+<option value="Falkland Islands">Falkland Islands</option>
+<option value="Dublin">Dublin</option>
+<option value="Edinburgh">Edinburgh</option>
+<option value="North Korea">North Korea</option>
+<option value="South Korea">South Korea</option>
+<option value="Mongolia">Mongolia</option>
+<option value="Tibet">Tibet</option>
+<option value="Poland">Poland</option>
+<option value="Greenland">Greenland</option>
+<option value="Scandinavian countries">Scandinavian countries</option>
+<option value="Benin">Benin</option>
+<option value="Arabian Sea">Arabian Sea</option>
+<option value="New France">New France</option>
+<option value="Gold Coast">Gold Coast</option>
+<option value="Madeira">Madeira</option>
+<option value="Canary Islands">Canary Islands</option>
+<option value="Elmina">Elmina</option>
+<option value="Caribbean Ocean">Caribbean Ocean</option>
+<option value="Atlantic Ocean">Atlantic Ocean</option>
+<option value="Pacific Ocean">Pacific Ocean</option>
+<option value="Gulf of Mexico">Gulf of Mexico</option>
+<option value="Mexico">Mexico</option>
+<option value="Panama Canal">Panama Canal</option>
+
+    </select>
+    <button onclick="startGame()">Start</button>
+    <p id="feedback"></p>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = {'Canada': [56.1304, -106.3468], 'Istanbul / Constantinople': [41.0082, 28.9784], 'France': [46.6034, 1.8883], 'England': [52.3555, -1.1743], 'Scotland': [56.4907, -4.2026], 'Ireland': [53.4129, -8.2439], 'Paris': [48.8566, 2.3522], 'London': [51.5074, -0.1278], 'New York City': [40.7128, -74.006], 'Washington DC': [38.9072, -77.0369], 'Florida': [27.9944, -81.7603], 'Brazil': [-14.235, -51.9253], 'Peru': [-9.19, -75.0152], 'Argentina': [-38.4161, -63.6167], 'Venezuela': [6.4238, -66.5897], 'Mediterranean Sea': [35.0, 18.0], 'Suez Canal': [30.5852, 32.2654], 'Egypt': [26.8206, 30.8025], 'Saudi Arabia': [23.8859, 45.0792], 'India': [20.5937, 78.9629], 'Indian Ocean': [-20.0, 80.0], 'Afghanistan': [33.9391, 67.71], 'Australia': [-25.2744, 133.7751], 'Greece': [39.0742, 21.8243], 'Austria': [47.5162, 14.5501], 'Italy': [41.8719, 12.5674], 'Hungary': [47.1625, 19.5033], 'Ethiopia': [9.145, 40.4897], 'Morocco': [31.7917, -7.0926], 'Ghana': [7.9465, -1.0232], 'South Africa': [-30.5595, 22.9375], 'Angola': [-11.2027, 17.8739], 'Cape of Good Hope': [-34.3568, 18.4721], 'Cuba': [21.5218, -77.7812], 'Jamaica': [18.1096, -77.2975], 'Haiti': [18.9712, -72.2852], 'Turkey': [38.9637, 35.2433], 'Middle East': [29.0, 45.0], 'Israel / Palestine': [31.0461, 34.8516], 'Pakistan': [30.3753, 69.3451], 'Thailand': [15.87, 100.9925], 'Vietnam': [14.0583, 108.2772], 'Somalia': [5.1521, 46.1996], 'Yemen': [15.5527, 48.5164], 'Arabian Peninsula': [23.0, 50.0], 'China': [35.8617, 104.1954], 'Japan': [36.2048, 138.2529], 'Russia': [61.524, 105.3188], 'Ukraine': [48.3794, 31.1656], 'Iran': [32.4279, 53.688], 'Iraq': [33.2232, 43.6793], 'Tehran': [35.6892, 51.389], 'Vancouver Island': [49.65, -125.45], 'Ottawa': [45.4215, -75.6972], 'Hudson Bay': [60.0, -85.0], 'James Bay': [52.0, -79.0], 'Falkland Islands': [-51.7963, -59.5236], 'Dublin': [53.3498, -6.2603], 'Edinburgh': [55.9533, -3.1883], 'North Korea': [40.3399, 127.5101], 'South Korea': [35.9078, 127.7669], 'Mongolia': [46.8625, 103.8467], 'Tibet': [31.0, 86.0], 'Poland': [51.9194, 19.1451], 'Greenland': [72.0, -40.0], 'Scandinavian countries': [60.0, 10.0], 'Benin': [9.3077, 2.3158], 'Arabian Sea': [15.0, 65.0], 'New France': [47.0, -70.0], 'Gold Coast': [5.0, -2.0], 'Madeira': [32.7607, -16.9595], 'Canary Islands': [28.2916, -16.6291], 'Elmina': [5.0843, -1.3508], 'Caribbean Ocean': [15.0, -75.0], 'Atlantic Ocean': [0.0, -30.0], 'Pacific Ocean': [0.0, -140.0], 'Gulf of Mexico': [25.0, -90.0], 'Mexico': [23.6345, -102.5528], 'Panama Canal': [9.1016, -79.6955]};
+        var selectedLocation = "";
+        var correctCoords = [];
+
+        function startGame() {
+            selectedLocation = document.getElementById("locationSelect").value;
+            if (selectedLocation in locations) {
+                correctCoords = locations[selectedLocation];
+                document.getElementById("feedback").innerText = "Now click on the map where you think " + selectedLocation + " is.";
+            } else {
+                document.getElementById("feedback").innerText = "Please select a location first.";
+            }
+        }
+
+        function onMapClick(e) {
+            if (!selectedLocation) {
+                alert("Please select a location first!");
+                return;
+            }
+
+            var guessedLat = e.latlng.lat;
+            var guessedLng = e.latlng.lng;
+            var correctLat = correctCoords[0];
+            var correctLng = correctCoords[1];
+
+            var distance = getDistance(guessedLat, guessedLng, correctLat, correctLng);
+
+            L.marker([guessedLat, guessedLng]).addTo(map)
+                .bindPopup("Your Guess: " + selectedLocation + "<br>Distance: " + distance.toFixed(2) + " km away.")
+                .openPopup();
+
+            document.getElementById("feedback").innerText = "Your guess for " + selectedLocation + " was " + distance.toFixed(2) + " km away.";
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the Earth in km
+            var dLat = (lat2 - lat1) * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>
